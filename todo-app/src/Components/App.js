@@ -12,6 +12,7 @@ class App extends React.Component{
             addNoteData:"",
             searchData:"",
             activeTabId:0,
+            uniqueId:0,
             list:[],
             tab:[{
                 title:'Home',
@@ -36,9 +37,12 @@ class App extends React.Component{
     addNote=(event)=>{
         if(event.key==='Enter'){
             this.setState({
+                uniqueId:this.state.uniqueId+1,
                 list:this.state.list.concat({
                         data:event.target.value,
-                        isCompleted:false}
+                        isCompleted:false,
+                        id:this.state.uniqueId,
+                }
                     ),
                 addNoteData:""
             });
@@ -47,7 +51,7 @@ class App extends React.Component{
     clickHandler=(id)=>{
         console.log("clicked"+id);
         const item=this.state.list.map((item,index)=> {
-            if(index===id){
+            if(item.id===id){
                 item.isCompleted=!item.isCompleted;
             }
             return item
@@ -105,10 +109,10 @@ class App extends React.Component{
                 <Header handler={this.changeTab} data={this.state.tab}/>
                 <div className="main-body">
                     <Search handler={this.searchInputHandler}/>
-                <input type="text" className={'add-note'} placeholder={'Add Note'} autoFocus={true} value={this.state.addNoteData} onChange={this.InputChange} onKeyPress={this.addNote} />
-               <div className="list-container">
+                    <input type="text" className={'add-note'} placeholder={'Add Note'} autoFocus={true} value={this.state.addNoteData} onChange={this.InputChange} onKeyPress={this.addNote} />
+                <div className="list-container">
                    {
-                       this.state.list.length===0?<ListItemDefaultBg/> :this.filterData(this.state.list,this.state.searchData).map((value,index)=><ListItem clickHandler={()=>this.clickHandler(index)} data={value.data} key={index} status={value.isCompleted}/>)
+                       this.state.list.length===0?<ListItemDefaultBg/> :this.filterData(this.state.list,this.state.searchData).map((value,index)=><ListItem clickHandler={()=>this.clickHandler(value.id)} data={value.data} key={index} status={value.isCompleted}/>)
                    }
                </div>
 
