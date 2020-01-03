@@ -33,7 +33,7 @@ class App extends React.Component{
         this.setState({
             addNoteData:event.target.value
         });
-    }
+    };
     addNote=(event)=>{
         if(event.key==='Enter'){
             this.setState({
@@ -47,10 +47,10 @@ class App extends React.Component{
                 addNoteData:""
             });
         }
-    }
+    };
     clickHandler=(id)=>{
-        console.log("clicked"+id);
-        const item=this.state.list.map((item,index)=> {
+
+        const item=this.state.list.map((item)=> {
             if(item.id===id){
                 item.isCompleted=!item.isCompleted;
             }
@@ -58,35 +58,28 @@ class App extends React.Component{
         });
         this.setState(item)
 
-    }
+    };
     changeTab=(id)=>{
         this.setState({
             activeTabId:id
         });
         const tabItem=this.state.tab.map((tab,index)=>{
-            if(id===index){
-                tab.status=true;
-            }else{
-                tab.status=false;
-            }
+            tab.status = id === index;
             return tab;
 
         });
         this.setState(tabItem)
-    }
+    };
     searchInputHandler=(event)=>{
 
         this.setState({
             searchData:event.target.value
         });
         console.log(this.state.searchData)
-    }
+    };
     filterData=(array=[],search='')=>array.filter((value) => {
         if(value.data.includes(search)){
             switch(this.state.activeTabId){
-                case 0:
-                    return value;
-                    break;
                 case 1:
                     if(value.isCompleted) {
                         return value;
@@ -97,10 +90,13 @@ class App extends React.Component{
                         return value;
                     }
                     break;
-
+                default:{
+                    return value;
+                }
             }
 
         }
+
     });
 
     render() {
