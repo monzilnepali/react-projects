@@ -4,9 +4,10 @@ class ListItem extends React.Component{
 
     render() {
         return(
-         <div className={'list'} key={this.props.index}>
+         <div className={'list-item'} key={this.props.index}>
              <p className={this.props.status?'line-through':''}>{this.props.data}</p>
-             <span className={'check-mark'} onClick={this.props.clickHandler}>{this.props.status?'ON':'OFF'}</span>
+             <div className={'check-mark '+ (this.props.status?'active':'inactive')}  onClick={this.props.clickHandler}/>
+
          </div>
         )
     }

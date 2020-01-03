@@ -1,7 +1,9 @@
 import React from "react";
 import ListItem from "./ListItem";
 import '../Style/app.css'
+import '../Style/listItem.css'
 import Header from "./Header";
+import Search from "./Search";
 import ListItemDefaultBg from "./ListItemDefaultBg";
 class App extends React.Component{
     constructor() {
@@ -32,7 +34,6 @@ class App extends React.Component{
         });
     }
     addNote=(event)=>{
-
         if(event.key==='Enter'){
             this.setState({
                 list:this.state.list.concat({
@@ -78,20 +79,22 @@ class App extends React.Component{
     }
     filterData=(array=[],search='')=>array.filter((value) => {
         if(value.data.includes(search)){
-            if(this.state.activeTabId===0){
-                return value
-            }
-            if(this.state.activeTabId===1){
-                if(value.isCompleted) {
-                    return value
-                }
-            }
-            if(this.state.activeTabId===2){
-                if(!value.isCompleted) {
-                    return value
-                }
-            }
+            switch(this.state.activeTabId){
+                case 0:
+                    return value;
+                    break;
+                case 1:
+                    if(value.isCompleted) {
+                        return value;
+                    }
+                    break;
+                case 2:
+                    if(!value.isCompleted) {
+                        return value;
+                    }
+                    break;
 
+            }
 
         }
     });
@@ -101,11 +104,14 @@ class App extends React.Component{
             <div className={'container'}>
                 <Header handler={this.changeTab} data={this.state.tab}/>
                 <div className="main-body">
-                    <input type="text" className={'add-note search-bar'} placeholder={'search here..'} onChange={this.searchInputHandler}/>
+                    <Search handler={this.searchInputHandler}/>
                 <input type="text" className={'add-note'} placeholder={'Add Note'} autoFocus={true} value={this.state.addNoteData} onChange={this.InputChange} onKeyPress={this.addNote} />
-                {
-                 this.filterData(this.state.list,this.state.searchData).map((value,index)=><ListItem clickHandler={()=>this.clickHandler(index)} data={value.data} key={index} status={value.isCompleted}/>)
-                }
+               <div className="list-container">
+                   {
+                       this.state.list.length===0?<ListItemDefaultBg/> :this.filterData(this.state.list,this.state.searchData).map((value,index)=><ListItem clickHandler={()=>this.clickHandler(index)} data={value.data} key={index} status={value.isCompleted}/>)
+                   }
+               </div>
+
                 </div>
             </div>
 

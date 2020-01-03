@@ -1,5 +1,5 @@
 .main-body{
-    width: 50%;
+    width: 60%;
     margin:0 auto;
 }
 .add-note{
@@ -11,10 +11,14 @@
     border:1px solid lightgrey;
     padding-left: 15px;
 }
+.add-note:focus{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
 .search-bar{
     height: 70px;
     margin-bottom: 50px;
+    background-color: white;
 }
 .search-bar:focus{
-    border: 2px solid red;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
