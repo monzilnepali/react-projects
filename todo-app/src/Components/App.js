@@ -5,6 +5,7 @@ import '../Style/listItem.css'
 import Header from "./Header";
 import Search from "./Search";
 import ListItemDefaultBg from "./ListItemDefaultBg";
+import AddNote from "./AddNote";
 class App extends React.Component{
     constructor() {
         super();
@@ -29,7 +30,7 @@ class App extends React.Component{
         }
 
     }
-    InputChange=(event)=>{
+    inputChange=(event)=>{
         this.setState({
             addNoteData:event.target.value
         });
@@ -42,13 +43,12 @@ class App extends React.Component{
                         data:event.target.value,
                         isCompleted:false,
                         id:this.state.uniqueId,
-                }
-                    ),
+                }),
                 addNoteData:""
             });
         }
     };
-    clickHandler=(id)=>{
+    listItemClickHandler=(id)=>{
 
         const item=this.state.list.map((item)=> {
             if(item.id===id){
@@ -71,30 +71,23 @@ class App extends React.Component{
         this.setState(tabItem)
     };
     searchInputHandler=(event)=>{
-
         this.setState({
             searchData:event.target.value
         });
-        console.log(this.state.searchData)
     };
     filterData=(array=[],search='')=>array.filter((value) => {
         if(value.data.includes(search)){
+            let item=null;
             switch(this.state.activeTabId){
                 case 1:
-                    if(value.isCompleted) {
-                        return value;
-                    }
+                    if(value.isCompleted) {item= value;}
                     break;
                 case 2:
-                    if(!value.isCompleted) {
-                        return value;
-                    }
+                    if(!value.isCompleted) {item= value;}
                     break;
-                default:{
-                    return value;
-                }
+                default:{item = value;}
             }
-
+            return item;
         }
 
     });
@@ -105,10 +98,17 @@ class App extends React.Component{
                 <Header handler={this.changeTab} data={this.state.tab}/>
                 <div className="main-body">
                     <Search handler={this.searchInputHandler}/>
-                    <input type="text" className={'add-note'} placeholder={'Add Note'} autoFocus={true} value={this.state.addNoteData} onChange={this.InputChange} onKeyPress={this.addNote} />
+                   <AddNote inputData={this.state.addNoteData} inputChangeHandler={this.inputChange} addNoteHandler={this.addNote} />
                 <div className="list-container">
                    {
-                       this.state.list.length===0?<ListItemDefaultBg/> :this.filterData(this.state.list,this.state.searchData).map((value,index)=><ListItem clickHandler={()=>this.clickHandler(value.id)} data={value.data} key={index} status={value.isCompleted}/>)
+                       this.state.list.length===0?<ListItemDefaultBg/>:this.filterData(this.state.list,this.state.searchData).map((value,index)=>
+                           <ListItem clickHandler={()=>
+                               this.listItemClickHandler(value.id)}
+                                     data={value.data}
+                                     key={index}
+                                     status={value.isCompleted}
+                           />
+                           )
                    }
                </div>
 
